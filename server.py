@@ -42,6 +42,19 @@ load_dotenv()
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
 
+# Set the layout to wide mode
+st.set_page_config(layout="wide")
+
+# Sidebar for file/folder upload and API Key input
+with st.sidebar:
+    st.header("Upload Files")
+    uploaded_files = st.file_uploader("Choose files", type=None, accept_multiple_files=True)
+    openai_api_key = st.text_input("OpenAI API Key", type="password")
+
+# Ensure the API key is set
+if openai_api_key:
+    os.environ["OPENAI_API_KEY"] = openai_api_key
+
 # Declaring the embeddings and LLM
 embeddings = OpenAIEmbeddings()
 llm = OpenAI(model="gpt-3.5-turbo-instruct")
@@ -58,19 +71,6 @@ prompt = ChatPromptTemplate.from_template("""
 
 # Creating the document chain
 document_chain = create_stuff_documents_chain(llm, prompt)
-
-# Set the layout to wide mode
-st.set_page_config(layout="wide")
-
-# Sidebar for file/folder upload and API Key input
-with st.sidebar:
-    st.header("Upload Files")
-    uploaded_files = st.file_uploader("Choose files", type=None, accept_multiple_files=True)
-    openai_api_key = st.text_input("OpenAI API Key", type="password")
-
-# Ensure the API key is set
-if openai_api_key:
-    os.environ["OPENAI_API_KEY"] = openai_api_key
 
 
 # Main content area with a central title
