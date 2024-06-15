@@ -20,7 +20,6 @@ def load_file(uploaded_file):
     
     # Process the file using appropriate LangChain loader
     if uploaded_file.type == "application/pdf":
-        # print("PDF encountered")
         loader = PyPDFLoader(temp_file_path)
         docs = loader.load()
     elif uploaded_file.type == 'text/csv':
@@ -56,8 +55,8 @@ if openai_api_key:
     os.environ["OPENAI_API_KEY"] = openai_api_key
 
 # Declaring the embeddings and LLM
-embeddings = OpenAIEmbeddings()
-llm = OpenAI(model="gpt-3.5-turbo-instruct")
+embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+llm = OpenAI(model="gpt-3.5-turbo-instruct", openai_api_key=openai_api_key)
 
 # Creating the prompt
 prompt = ChatPromptTemplate.from_template("""
@@ -71,7 +70,6 @@ prompt = ChatPromptTemplate.from_template("""
 
 # Creating the document chain
 document_chain = create_stuff_documents_chain(llm, prompt)
-
 
 # Main content area with a central title
 st.markdown(
@@ -89,10 +87,8 @@ if uploaded_files:
     
     for uploaded_file in uploaded_files:
         documents = load_file(uploaded_file)
-        # print(len(documents))
         if documents:
             all_documents.extend(documents)
-            # print(len(all_documents))
     
     if all_documents:
         # Initialize the FAISS vector store
