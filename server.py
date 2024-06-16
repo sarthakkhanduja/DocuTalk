@@ -42,7 +42,7 @@ os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
 
 # Set the layout to wide mode
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide", page_title="DocuTalk - Say hello to your files")
 
 # Sidebar for file/folder upload and API Key input
 with st.sidebar:
